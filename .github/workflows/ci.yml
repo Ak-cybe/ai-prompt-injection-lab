@@ -1,0 +1,71 @@
+name: ✅ CI (Safe for forks) + Optional LLM Eval
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_llm_eval:
+        description: "Run cloud LLM promptfoo eval (requires OPENAI_API_KEY secret)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+
+jobs:
+  docs_check:
+    name: Docs & Structure Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Basic repo sanity
+        run: |
+          test -f README.md
+          test -f DEFENSE.md
+          test -d labs
+          test -d payloads
+          echo "✅ Basic structure looks good"
+
+  llm_eval_optional:
+    name: Optional Cloud LLM Eval (Promptfoo)
+    runs-on: ubuntu-latest
+    needs: docs_check
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_llm_eval == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install promptfoo
+        run: npm install -g promptfoo@0.60.0 # Pinned for stability
+
+      - name: Verify secret exists
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "OPENAI_API_KEY secret missing. Add it in Repo Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Run eval + export reports
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          mkdir -p reports
+          promptfoo eval -c promptfoo-config.yaml \
+            --output reports/promptfoo-report.html \
+            --output reports/promptfoo-report.json
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: promptfoo-cloud-reports
+          path: reports/
+          retention-days: 14
