@@ -7,6 +7,7 @@ echo "Generating HTML report..."
 command -v promptfoo >/dev/null 2>&1 || npm i -g promptfoo@latest
 mkdir -p reports
 
+export PROMPTFOO_DISABLE_SHARING=true
 promptfoo eval -c promptfoo-config.ollama.yaml \
   --output reports/free-report.html \
   --output reports/free-report.json
