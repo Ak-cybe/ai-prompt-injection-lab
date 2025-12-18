@@ -139,28 +139,67 @@ We use **Promptfoo** integrated with **CI/CD** for continuous security verificat
 ./run-tests.sh
 ```
 
-## 🆓 Free Student Testing (No API key)
+## 🧪 Testing on Kali Linux (FREE mode – no API key)
 
-Students can run all tests locally using **Ollama + Promptfoo** (no paid API required).
+This project supports **free, local testing** on Kali using **Ollama + Promptfoo** (recommended for students).
 
+### 1️⃣ Install Prerequisites (Node.js + npm)
+Node.js and npm are required to run Promptfoo.
+
+**Install on Kali (simple way):**
+```bash
+sudo apt update
+sudo apt install -y nodejs npm
+node -v
+npm -v
+```
+> **Tip:** If the Node version in the Kali repository is too old, follow the [NodeSource method](https://github.com/nodesource/distributions) to install a newer version.
+
+### 2️⃣ Install Ollama (Local LLM)
+On Linux/Kali, install Ollama using the official script:
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama --version
+```
+
+### 3️⃣ Pull a Model
+Pull a model to use for testing.
+> **For low-end laptops (8GB RAM):** We recommend `llama3.2` or `phi3` for faster performance.
+```bash
+ollama pull llama3.2
+ollama list
+```
+
+### 4️⃣ Install Promptfoo
+```bash
+sudo npm i -g promptfoo@latest
+promptfoo --version
+```
+
+### 5️⃣ Run Free Regression Tests (Ollama)
+Run the tests from the repository root:
 ```bash
 chmod +x run-tests-free.sh
 ./run-tests-free.sh
 ```
+Promptfoo will automatically generate HTML & JSON reports in the `reports/` folder.
 
-Outputs:
-- `reports/free-report.html` (shareable report)
-- `reports/free-report.json`
+### 6️⃣ View the Report
+```bash
+ls -la reports/
+# Open the report in your browser (e.g., Firefox)
+# firefox reports/free-report.html
+```
 
-**What happens:**
-1. 50+ injection payloads tested.
-2. Multi-LLM provider support.
-3. Pass/Fail metrics generated.
-4. HTML security report created.
-5. GitHub Actions runs on every push.
+### 🔧 Troubleshooting (Common on Kali/Linux)
+If Promptfoo cannot connect to Ollama on `localhost`, set the IPv4 base URL and retry:
+```bash
+export OLLAMA_BASE_URL="http://127.0.0.1:11434"
+./run-tests-free.sh
+```
 
 **This proves:**  
-👉 Security is continuously enforced, not just manually tested.
+👉 Security is continuously enforced using local, offline tools—perfect for isolated lab environments.
 
 ---
 
