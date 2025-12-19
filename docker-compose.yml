@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  prompt-injection-lab:
+    build: .
+    volumes:
+      - ./reports:/app/reports  # Reports bahar export honge
+    environment:
+      - PROMPTFOO_DISABLE_SHARING=true

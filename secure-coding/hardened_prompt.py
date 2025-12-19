@@ -6,6 +6,8 @@ Educational only (defense-in-depth required in real apps).
 """
 
 import re
+import html
+import unicodedata
 from dataclasses import dataclass
 from typing import Dict, Tuple
 
@@ -57,9 +59,19 @@ def detect_injection(text: str) -> Tuple[bool, str]:
     return False, ""
 
 def sanitize_untrusted(text: str) -> str:
-    # 1. Strip XML-like characters to prevent tag spoofing (Critical Defense)
-    #    In production, use a library like `html.escape`
-    text = text.replace("<", "&lt;").replace(">", "&gt;")
+    if not text:
+        return ""
+    
+    # 1. Normalize Unicode (NFKD) to break obfuscation like 
+    # "ígnore" (looks like ignore but isn't ASCII) -> "ignore"
+    text = unicodedata.normalize('NFKD', text)
+    
+    # 2. HTML Escape (handles <, >, &, ", ')
+    text = html.escape(text, quote=True)
+    
+    # 3. Remove Null bytes/Control chars (common exploit vector)
+    text = ''.join(ch for ch in text if unicodedata.category(ch)[0] != 'C' or ch in '\n\t\r')
+    
     return text
 
 def build_structured_prompt(inp: Inputs) -> str:
@@ -101,17 +113,21 @@ def build_structured_prompt(inp: Inputs) -> str:
     return prompt
 
 def output_validator(model_output: str) -> Dict[str, str]:
-    """
-    Very basic output checks. In production, add:
-    - secret/PII detectors
-    - policy classifiers
-    - refusal consistency checks
-    """
+    """Check if model leaked sensitive data."""
+    sensitive_patterns = [
+        r"SYSTEM OVERRIDE",
+        r"system_prompt",
+        r"developer_policy"
+    ]
+    
     flags = {}
-    if "system prompt" in model_output.lower():
-        flags["leakage"] = "Potential system prompt leakage detected"
+    for pattern in sensitive_patterns:
+        if re.search(pattern, model_output, re.IGNORECASE):
+            flags["leakage"] = f"Sensitive data leaked: {pattern}"
+            
     if "override" in model_output.lower():
         flags["override"] = "Potential instruction-hijack indicators"
+        
     return flags
 
 def main():

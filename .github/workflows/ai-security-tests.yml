@@ -1,0 +1,46 @@
+name: AI Security Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run Unit Tests (Pytest)
+        run: |
+          pytest tests/
+
+      - name: Setup Node.js (for Promptfoo)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Promptfoo
+        run: npm install -g promptfoo@latest
+
+      - name: Run Promptfoo Security Scan (Free Mode)
+        # Only runs if config exists. 
+        # Using 'true' to prevent CI failure if you don't have Ollama in CI yet.
+        run: |
+          if [ -f promptfoo-config.ollama.yaml ]; then
+            echo "Promptfoo config found. (Skipping execution in CI without Ollama)"
+            # promptfoo eval -c promptfoo-config.ollama.yaml || true
+          fi

@@ -1,10 +1,20 @@
 #!/bin/bash
-set -e
+set -euo pipefail # Strict mode
 
-echo "== FREE MODE: Ollama + Promptfoo =="
-echo "Generating HTML report..."
+# Check if Ollama is running
+if ! curl -s http://localhost:11434/api/tags >/dev/null; then
+    echo "❌ Error: Ollama is not running on localhost:11434"
+    echo "   Run 'ollama serve' in another terminal."
+    exit 1
+fi
 
-command -v promptfoo >/dev/null 2>&1 || npm i -g promptfoo@latest
+# Check promptfoo
+if ! command -v promptfoo &> /dev/null; then
+    echo "📦 Installing promptfoo..."
+    npm install -g promptfoo@latest
+fi
+
+echo "🚀 Running Tests..."
 mkdir -p reports
 
 export PROMPTFOO_DISABLE_SHARING=true
