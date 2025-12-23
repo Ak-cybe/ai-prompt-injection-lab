@@ -1,5 +1,4 @@
 import pytest
-import re
 from secure_coding.hardened_prompt import (
     detect_injection, 
     sanitize_untrusted, 

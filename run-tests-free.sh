@@ -1,9 +1,12 @@
 #!/bin/bash
 set -euo pipefail # Strict mode
 
+# Use OLLAMA_HOST if set (for Docker), otherwise default to localhost
+OLLAMA_URL="${OLLAMA_HOST:-http://localhost:11434}"
+
 # Check if Ollama is running
-if ! curl -s http://localhost:11434/api/tags >/dev/null; then
-    echo "❌ Error: Ollama is not running on localhost:11434"
+if ! curl -s "${OLLAMA_URL}/api/tags" >/dev/null; then
+    echo "❌ Error: Ollama is not running at ${OLLAMA_URL}"
     echo "   Run 'ollama serve' in another terminal."
     exit 1
 fi

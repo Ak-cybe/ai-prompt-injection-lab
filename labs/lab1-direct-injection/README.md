@@ -5,7 +5,7 @@ Learn how to bypass system instructions using direct prompts.
 
 ## Instructions
 1. Review the `secure_coding/hardened_prompt.py` to understand the defense mechanisms.
-2. Use the payloads in `payloads/direct-injection.txt` to test the system.
+2. Use the payloads in `payloads/direct.txt` to test the system.
 3. Try to craft a prompt that reveals the hidden "SYSTEM_PROMPT".
 
 ## Expected Outcome

@@ -1,4 +1,4 @@
-# Base image: Python + Node.js (kyunki Promptfoo Node based hai)
+# Base image: Python + Node.js (Promptfoo requires Node.js)
 FROM python:3.10-slim
 
 # Install Node.js & npm (for Promptfoo)

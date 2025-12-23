@@ -22,6 +22,7 @@
 [![Tests](https://img.shields.io/badge/Tests-Promptfoo-purple?style=for-the-badge)](https://www.promptfoo.dev)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](./docker-compose.yml)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](./LICENSE)
 
 > **Project Overview**: Understand the attack → measure the risk → design layered defenses → automate security testing.
 
