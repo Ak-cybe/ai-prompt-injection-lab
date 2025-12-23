@@ -94,14 +94,20 @@ graph TD
 
 ### 📥 Installation Methods
 
-#### Option A: Docker (Easiest & Recommended) 🐳
+#### Option A: Docker (For Consistent Environments) 🐳
+**Prerequisites:** Ollama must be running on your host machine.
+
 1. **Install Docker Desktop**: [Download here](https://www.docker.com/products/docker-desktop/).
-2. **Run the Lab**:
+2. **Start Ollama on your host**: `ollama serve`
+3. **Pull the model**: `ollama pull llama3.3`
+4. **Run the Lab**:
    ```bash
    docker-compose up --build
    ```
 
-#### Option B: Manual Setup 🛠️
+#### Option B: Manual Setup (Recommended for Beginners) 🛠️
+This gives you more control and is easier to troubleshoot.
+
 1. **Clone & Setup**:
    ```bash
    git clone https://github.com/Ak-cybe/ai-prompt-injection-lab.git
@@ -111,7 +117,22 @@ graph TD
    ```
 2. **Setup Ollama**:
    - Install [Ollama](https://ollama.com/).
-   - Pull the model: `ollama pull llama3` (or the model specified in `promptfoo-config.ollama.yaml`).
+   - Pull the model: `ollama pull llama3.3`
+
+### 🤖 Model Compatibility
+
+This project is tested with:
+- **llama3.3** (recommended, used in `promptfoo-config.ollama.yaml`)
+- **llama3** (also works)
+- **mistral** (lightweight alternative)
+
+If using a different model, update `promptfoo-config.ollama.yaml`:
+```yaml
+providers:
+  - id: ollama:chat:YOUR_MODEL_NAME  # e.g., ollama:chat:mistral
+```
+
+Verify available models: `ollama list`
 
 ---
 

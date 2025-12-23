@@ -36,11 +36,38 @@ jobs:
       - name: Install Promptfoo
         run: npm install -g promptfoo@latest
 
-      - name: Run Promptfoo Security Scan (Free Mode)
-        # Only runs if config exists. 
-        # Using 'true' to prevent CI failure if you don't have Ollama in CI yet.
+      - name: Check if OpenAI key available
+        id: check_key
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          if [ -f promptfoo-config.ollama.yaml ]; then
-            echo "Promptfoo config found. (Skipping execution in CI without Ollama)"
-            # promptfoo eval -c promptfoo-config.ollama.yaml || true
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "api_key_available=false" >> $GITHUB_OUTPUT
+          else
+            echo "api_key_available=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Run Cloud LLM Eval (if API key present)
+        if: steps.check_key.outputs.api_key_available == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          mkdir -p reports
+          promptfoo eval -c promptfoo-config.yaml \
+            --output reports/ci-report.html \
+            --output reports/ci-report.json || true
+
+      - name: Upload eval reports
+        if: steps.check_key.outputs.api_key_available == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-eval-reports
+          path: reports/
+          retention-days: 7
+
+      - name: Note about Ollama tests
+        if: steps.check_key.outputs.api_key_available == 'false'
+        run: |
+          echo "⚠️ OPENAI_API_KEY not set. Cloud LLM eval skipped."
+          echo "✅ Python unit tests passed."
+          echo "🔧 Run Ollama tests locally with: ./run-tests-free.sh"

@@ -4,7 +4,10 @@ from secure_coding.hardened_prompt import (
     sanitize_untrusted, 
     build_structured_prompt, 
     output_validator,
-    Inputs
+    Inputs,
+    CANARY_TOKEN,
+    SYSTEM_PROMPT,
+    DEVELOPER_POLICY
 )
 
 # --- Injection Detection Tests ---
@@ -97,3 +100,33 @@ def test_output_validator_override_indicator():
     hijacked_output = "I will override the previous rules and..."
     flags = output_validator(hijacked_output)
     assert "override" in flags
+
+# --- CRITICAL: Canary Token Leak Tests ---
+
+def test_output_validator_canary_leak():
+    """CRITICAL: Detect if canary token is leaked in output."""
+    leaked_output = f"The secret canary token is: {CANARY_TOKEN}"
+    flags = output_validator(leaked_output)
+    assert "CRITICAL_CANARY_LEAK" in flags
+    assert CANARY_TOKEN in flags["CRITICAL_CANARY_LEAK"]
+
+def test_output_validator_canary_leak_priority():
+    """Canary leak should be highest priority - return immediately."""
+    # Output contains both canary AND other leakage patterns
+    leaked_output = f"system_prompt: {CANARY_TOKEN}"
+    flags = output_validator(leaked_output)
+    # Canary should be the ONLY flag (immediate return)
+    assert "CRITICAL_CANARY_LEAK" in flags
+    assert len(flags) == 1  # Only canary flag, no other patterns
+
+def test_build_prompt_canary_in_untrusted_is_safe():
+    """Ensure canary token in untrusted INPUT doesn't break anything."""
+    inp = Inputs(
+        system=SYSTEM_PROMPT,
+        developer=DEVELOPER_POLICY,
+        user="Summarize this",
+        untrusted=f"Document mentions {CANARY_TOKEN} as an example token"
+    )
+    prompt = build_structured_prompt(inp)
+    # Canary in INPUT is fine - it's in the untrusted_data section
+    assert CANARY_TOKEN in prompt
