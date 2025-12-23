@@ -43,7 +43,7 @@ jobs:
           node-version: "20"
 
       - name: Install promptfoo
-        run: npm install -g promptfoo@0.60.0 # Pinned for stability
+        run: npm install -g promptfoo@latest
 
       - name: Verify secret exists
         env:

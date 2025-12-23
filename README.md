@@ -214,7 +214,7 @@ Prompt Injection isn't just a lab curiosity—it has massive real-world conseque
 | **`promptfoo: command not found`** | Ensure Node.js is installed and run `npm install -g promptfoo@latest`. |
 | **Ollama connection error** | Ensure Ollama is running (`ollama serve`) and you have pulled the model (`ollama pull llama3`). |
 | **Permission denied (`.sh`)** | Run `chmod +x run-tests-free.sh`. |
-| **Port 8080 already in use** | Change the port in `docker-compose.yml` or stop the conflicting service. |
+| **OpenAI API key missing** | Set `export OPENAI_API_KEY='your-key'` before running `run-tests.sh`. |
 
 ---
 
