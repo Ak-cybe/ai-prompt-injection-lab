@@ -150,7 +150,12 @@ After installation, verify your environment is ready:
    python secure_coding/hardened_prompt.py
    # Expected: A structured XML prompt printed to the console showing defense layers.
    ```
-3. **Run a Sample Security Scan**:
+3. **Run Unit Tests**:
+   ```bash
+   PYTHONPATH=. pytest tests/ -v
+   # Expected: 13 passed tests
+   ```
+4. **Run a Sample Security Scan (Requires Ollama)**:
    ```bash
    ./run-tests-free.sh
    ```

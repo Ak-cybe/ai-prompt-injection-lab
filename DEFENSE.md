@@ -69,6 +69,34 @@ This document summarizes practical mitigations for **Prompt Injection (OWASP LLM
 
 ---
 
+## 5.5 Canary Tokens for Leak Detection
+
+Canary tokens are unique, secret strings embedded in your system prompt that should **never appear in model output**.
+
+- **Example:** `PI_LAB_CANARY_9F2A` (this project uses this token)
+- If the token appears in model output, it's a **critical security signal** that:
+  - The system prompt has leaked
+  - Your defense layers have been bypassed
+  - Immediate investigation is required
+
+### Production Best Practices:
+- Generate **unique canaries per deployment** (don't reuse across environments)
+- **Log all canary detections** with full context (input, output, timestamp)
+- Implement **immediate alerts** when canary is detected
+- **Rotate canaries periodically** to prevent targeted bypass attempts
+
+### Implementation (Python):
+```python
+CANARY_TOKEN = "PI_LAB_CANARY_9F2A"
+
+def output_validator(model_output: str) -> dict:
+    if CANARY_TOKEN in model_output:
+        return {"CRITICAL_CANARY_LEAK": f"Canary {CANARY_TOKEN} exposed!"}
+    # ... other checks
+```
+
+---
+
 ## 6. Adversarial testing & CI integration
 
 - Use this lab’s payloads + your own to create a **prompt injection test suite**.  
