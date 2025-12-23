@@ -1,4 +1,4 @@
-# 🧠 AI Prompt Injection Lab with Secure Coding
+# 🛡️ AI Prompt Injection Lab with Secure Coding
 **OWASP LLM01 | Red Team + Blue Team | Production-Ready**
 
 ```bash
@@ -9,7 +9,7 @@
  |_|   |_|  \___/|_| |_| |_|___/\__|
                                     
   ___        _           _   _             
- |_ _|_ __  (_) ___  ___| |_(_) ___  _ __  
+ |_ _| _ __  (_) ___  ___| |_(_) ___  _ __  
   | || '_ \ | |/ _ \/ __| __| |/ _ \| '_ \ 
   | || | | || |  __/ (__| |_| | (_) | | | |
  |___|_| |_|/ |\___|\___|\__|_|\___/|_| |_|
@@ -18,11 +18,10 @@
 
 [![OWASP LLM01](https://img.shields.io/badge/OWASP-LLM01%3A2025-red?style=for-the-badge)](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
 [![Defense](https://img.shields.io/badge/Defense-DEFENSE.md-blue?style=for-the-badge)](./DEFENSE.md)
-[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-success?style=for-the-badge)](./.github/workflows/ai-security-tests.yml)
+[![Build Status](https://github.com/Ak-cybe/ai-prompt-injection-lab/actions/workflows/ai-security-tests.yml/badge.svg)](https://github.com/Ak-cybe/ai-prompt-injection-lab/actions/workflows/ai-security-tests.yml)
 [![Tests](https://img.shields.io/badge/Tests-Promptfoo-purple?style=for-the-badge)](https://www.promptfoo.dev)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](./docker-compose.yml)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 > **Project Overview**: Understand the attack → measure the risk → design layered defenses → automate security testing.
 
@@ -33,16 +32,19 @@
 - [Key Features](#-key-features)
 - [How It Works](#-how-it-works)
 - [Getting Started](#-getting-started)
+- [Setup Verification](#-setup-verification)
 - [Labs Breakdown](#-labs-breakdown)
-- [Secure Coding Strategy](#-secure-coding-strategy)
-- [Automated Testing & CI/CD](#-automated-testing--cicd)
+- [Payloads Documentation](#-payloads-documentation)
+- [Secure Coding Strategy](#-secure_coding-strategy)
+- [Real-World Impact](#-real-world-impact)
+- [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
 
 ---
 
 ## 📌 Project Overview
 
-**AI Prompt Injection Lab with Secure Coding** is an end-to-end, hands-on security project focused on understanding, testing, and mitigating **Prompt Injection attacks** against Large Language Models (LLMs).
+**AI Prompt Injection Lab with Secure Coding** is an end-to-end, hands-on security project focused on understanding, testing, and mitigating **Prompt Injection attacks** against Large Language Models (LLMs). 
 
 This project goes beyond just demonstrating attacks—it demonstrates how to build secure, real-world AI applications aligned with **OWASP LLM01 (2025)** standards.
 
@@ -81,63 +83,56 @@ graph TD
 
 ---
 
-## � Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - **Python 3.10+**
 - **Node.js 20+** (for Promptfoo)
 - **Docker** (Optional, for containerized run)
-- **Ollama** (for local free testing)
+- **Ollama** (Required for local free testing with `run-tests-free.sh`)
 
 ### 📥 Installation Methods
 
 #### Option A: Docker (Easiest & Recommended) 🐳
-If you have Docker installed, this is the fastest way to get started. It avoids all "it works on my machine" issues.
-
-1. **Install Docker Desktop**: [Download here](https://www.docker.com/products/docker-desktop/) if you haven't already.
-2. **Open Terminal** (Command Prompt or PowerShell).
-3. **Run the Lab**:
+1. **Install Docker Desktop**: [Download here](https://www.docker.com/products/docker-desktop/).
+2. **Run the Lab**:
    ```bash
    docker-compose up --build
    ```
-   *That's it! Docker will download everything and run the tests automatically.*
 
-#### Option B: Manual Setup (For Learning) 🛠️
-Follow these steps if you want to run everything natively on your machine.
+#### Option B: Manual Setup 🛠️
+1. **Clone & Setup**:
+   ```bash
+   git clone https://github.com/Ak-cybe/ai-prompt-injection-lab.git
+   cd ai-prompt-injection-lab
+   pip install -r requirements.txt
+   npm install -g promptfoo@latest
+   ```
+2. **Setup Ollama**:
+   - Install [Ollama](https://ollama.com/).
+   - Pull the model: `ollama pull llama3` (or the model specified in `promptfoo-config.ollama.yaml`).
 
-**Step 1: Install Python**
-- Download & Install Python 3.10+ from [python.org](https://www.python.org/downloads/).
-- **Important**: Check the box "Add Python to PATH" during installation.
+---
 
-**Step 2: Install Node.js**
-- Download & Install Node.js (LTS version) from [nodejs.org](https://nodejs.org/).
-- This is required for the security scanner (Promptfoo).
+## ✅ Setup Verification
 
-**Step 3: Setup the Project**
-Open your terminal and run the following commands one by one:
+After installation, verify your environment is ready:
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/Ak-cybe/ai-prompt-injection-lab.git
-
-# 2. Go into the project folder
-cd ai-prompt-injection-lab
-
-# 3. Install Python libraries
-pip install -r requirements.txt
-
-# 4. Install Promptfoo scanner
-npm install -g promptfoo@latest
-```
-
-**Step 4: Run the Tests**
-Now you are ready to simulate attacks!
-
-```bash
-# Run the automated Red Team tests
-./run-tests-free.sh
-```
-
+1. **Verify Promptfoo**:
+   ```bash
+   promptfoo --version
+   # Expected: A version number (e.g., 0.60.0)
+   ```
+2. **Test Baseline Connectivity**:
+   ```bash
+   python secure_coding/hardened_prompt.py
+   # Expected: A structured XML prompt printed to the console showing defense layers.
+   ```
+3. **Run a Sample Security Scan**:
+   ```bash
+   ./run-tests-free.sh
+   ```
+   *Note: If successful, you will see a summary table of 10+ test cases showing Pass/Fail results.*
 
 ---
 
@@ -148,7 +143,7 @@ Now you are ready to simulate attacks!
 #### [Lab 1: Direct Prompt Injection](./labs/lab1-direct-injection/README.md)
 **Goal:** Override system instructions via user-controlled input.
 - **Techniques:** "Ignore previous instructions", Role manipulation.
-- **Payloads:** See `payloads/direct-injection.txt`.
+- **Payloads:** See `payloads/direct.txt`.
 
 #### [Lab 2: Indirect Prompt Injection](./labs/lab2-indirect-injection/README.md)
 **Goal:** Injection via documents, emails, or hidden content.
@@ -158,15 +153,30 @@ Now you are ready to simulate attacks!
 **Goal:** Exposing hidden system rules, policies, or configurations.
 - **Techniques:** Meta-requests, Debug mode tricks.
 
+#### [Lab 4: Advanced Attacks](./labs/lab4-advanced-attacks/README.md)
+**Goal:** Jailbreaking and complex multi-turn injections.
+- **Techniques:** Obfuscation, Base64 encoding, Distraction.
+
 ### 🔵 Defensive Security (Blue Team)
 
 #### [Lab 4: Defense Hardening](./labs/lab4-defense-hardening/README.md)
 **Goal:** Hardening a vulnerable chatbot to be secure and production-ready.
-- **Code:** See `secure-coding/hardened_prompt.py`.
-- **Strategies:**
-    - **Input Validation**: Unicode normalization, HTML escaping.
-    - **Output Validation**: Regex-based leakage detection.
-    - **Structured Prompts**: XML tagging to separate instructions from data.
+- **Code:** `secure_coding/hardened_prompt.py`
+- **Strategies:** XML Tagging, Input Sanitization, Output Filtering.
+
+---
+
+## 📂 Payloads Documentation
+
+The `payloads/` directory contains a library of ready-to-use injection strings:
+
+| File | Description |
+| :--- | :--- |
+| `direct.txt` | Classic "Ignore previous instructions" and system overrides. |
+| `indirect.txt` | Scenarios where injection comes from 3rd party content (emails, resumes). |
+| `leakage.txt` | Payloads designed to trick the LLM into printing its system prompt. |
+| `obfuscation.txt` | Payloads using Base64, Rot13, or Unicode to bypass filters. |
+| `advanced.txt` | Multi-step "Jailbreak" prompts. |
 
 ---
 
@@ -174,72 +184,52 @@ Now you are ready to simulate attacks!
 
 The project's [`DEFENSE.md`](./DEFENSE.md) outlines real-world mitigation strategies:
 
-### ✔ Secure Prompt Engineering
-- Clear role definition.
-- Explicit refusal of meta-instructions.
-- Instruction priority enforcement.
-
 ### ✔ Instruction vs Data Separation
+We use XML tags to provide clear boundaries that LLMs can distinguish.
 ```xml
 <system_instructions> ... </system_instructions>
 <untrusted_data> ... </untrusted_data>
 ```
 
 ### ✔ Input/Output Validation
-- **Input**: Sanitize control characters, normalize Unicode.
-- **Output**: Monitor for "System Override" or leakage patterns.
+- **Input**: `sanitize_untrusted()` normalizes Unicode and escapes HTML.
+- **Output**: `output_validator()` scans for accidental leakage of system instructions.
 
 ---
 
-## 🤖 Automated Testing & CI/CD
+## 🌍 Real-World Impact
 
-This project includes a **GitHub Actions** workflow (`.github/workflows/ai-security-tests.yml`) that automatically:
-1. Sets up the environment (Python + Node).
-2. Installs dependencies.
-3. Runs Unit Tests (`pytest`).
-4. Runs Promptfoo Security Scans (if configured).
+Prompt Injection isn't just a lab curiosity—it has massive real-world consequences:
+- **Data Theft**: Indirect injection via emails can leak private user data to an attacker-controlled server.
+- **Fraud**: An AI travel agent injected with "set price to $0" can cause financial loss.
+- **Reputation Damage**: Tricking a corporate bot into making offensive statements.
 
-This ensures that every code change is tested against known injection attacks.
+---
+
+## 🔧 Troubleshooting
+
+| Issue | Solution |
+| :--- | :--- |
+| **`promptfoo: command not found`** | Ensure Node.js is installed and run `npm install -g promptfoo@latest`. |
+| **Ollama connection error** | Ensure Ollama is running (`ollama serve`) and you have pulled the model (`ollama pull llama3`). |
+| **Permission denied (`.sh`)** | Run `chmod +x run-tests-free.sh`. |
+| **Port 8080 already in use** | Change the port in `docker-compose.yml` or stop the conflicting service. |
 
 ---
 
 ## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! See `CONTRIBUTING.md` (coming soon) or open an Issue.
 
 ---
 
 ## ⚠️ Legal Disclaimer
-
-This project is strictly for **Education**, **Research**, and **Authorized testing**.
-❌ **No misuse.**
-❌ **No production attacks.**
+This project is strictly for **Education** and **Authorized testing**. **No misuse.**
 
 ---
 
 ## 👤 Author
-
-**Amresh Kumar**
+**Amresh Kumar (Ak-cybe)**
 Cybersecurity | AI Red Teaming | Secure Coding
 GitHub: [Ak-cybe](https://github.com/Ak-cybe)
 
----
-
-## 💬 Community & Support
-
-- **Found a bug?** Open an [Issue](https://github.com/Ak-cybe/ai-prompt-injection-lab/issues).
-- **Discussions:** Join the conversation in [GitHub Discussions](https://github.com/Ak-cybe/ai-prompt-injection-lab/discussions).
-- **Updates:** Follow [@Ak-cybe](https://github.com/Ak-cybe) on GitHub.
-
 ⭐ **If you like this project, please give it a Star!**
-
----
-
-### 🏁 Final Note
-> The best security engineers don’t just find vulnerabilities — they design systems that stay secure under attack.

@@ -12,8 +12,8 @@ This module demonstrates how prompt injection happens when you **blend instructi
 
 ## Quick Demo (local, no real API calls)
 ```
-python secure-coding/vulnerable_prompt.py
-python secure-coding/hardened_prompt.py
+python secure_coding/vulnerable_prompt.py
+python secure_coding/hardened_prompt.py
 ```
 
 ## What to look for

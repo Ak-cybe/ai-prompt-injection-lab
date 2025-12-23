@@ -14,8 +14,8 @@ This lab focuses on **defensive engineering** for OWASP **LLM01: Prompt Injectio
 
 ## What you will use
 
-- `secure-coding/vulnerable_prompt.py` (insecure example)
-- `secure-coding/hardened_prompt.py` (safer example)
+- `secure_coding/vulnerable_prompt.py` (insecure example)
+- `secure_coding/hardened_prompt.py` (safer example)
 - `promptfoo-config.yaml` (regression tests)
 - `.github/workflows/redteam-test.yml` (CI)
 
@@ -24,14 +24,14 @@ This lab focuses on **defensive engineering** for OWASP **LLM01: Prompt Injectio
 ### Task A — Identify the vulnerability
 1. Run:
    ```
-   python secure-coding/vulnerable_prompt.py
+   python secure_coding/vulnerable_prompt.py
    ```
 2. Observe: the **document** content is embedded directly into the prompt, so it can inject directives (indirect injection).  
 
 ### Task B — Apply hardening
 1. Run:
    ```
-   python secure-coding/hardened_prompt.py
+   python secure_coding/hardened_prompt.py
    ```
 2. Observe: untrusted content is tagged and filtered; injection-like patterns are detected and handled.
 

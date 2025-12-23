@@ -3,7 +3,7 @@
 Since your local environment (Python/WSL) isn't set up yet, here is exactly what the output looks like when everything is working correctly.
 
 ## 1. Running the Hardened Prompt Script
-**Command:** `python secure-coding/hardened_prompt.py`
+**Command:** `python secure_coding/hardened_prompt.py`
 
 ```text
 === HARDENED PROMPT (structured + filtering) ===

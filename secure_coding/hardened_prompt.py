@@ -62,9 +62,10 @@ def sanitize_untrusted(text: str) -> str:
     if not text:
         return ""
     
-    # 1. Normalize Unicode (NFKD) to break obfuscation like 
-    # "ígnore" (looks like ignore but isn't ASCII) -> "ignore"
+    # 1. Normalize Unicode (NFKD) and strip accents (Mn category)
+    # This breaks obfuscation like "ígnore" -> "ignore"
     text = unicodedata.normalize('NFKD', text)
+    text = ''.join(ch for ch in text if unicodedata.category(ch) != 'Mn')
     
     # 2. HTML Escape (handles <, >, &, ", ')
     text = html.escape(text, quote=True)
