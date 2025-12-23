@@ -35,7 +35,7 @@
 - [Setup Verification](#-setup-verification)
 - [Labs Breakdown](#-labs-breakdown)
 - [Payloads Documentation](#-payloads-documentation)
-- [Secure Coding Strategy](#-secure_coding-strategy)
+- [Secure Coding Strategy](#-secure-coding-strategy)
 - [Real-World Impact](#-real-world-impact)
 - [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
